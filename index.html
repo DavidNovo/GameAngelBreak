@@ -8,11 +8,17 @@
 </head>
 <body>
 <script>
+// Phaser will make its own canvas
     var game = new Phaser.Game(480, 320, Phaser.AUTO, null, {
       preload: preload, create: create, update: update
     });
+    // preload the assets for the game
     function preload() {}
+
+    // this is executed once after the preload functions finishes
     function create() {}
+
+    // This is executed on every frame
     function update() {}
 </script>
 </body>
