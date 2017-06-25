@@ -14,6 +14,8 @@
     });
 
     var ball
+    var paddle
+
     // preload the assets for the game
     function preload() {
       myGame.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -25,6 +27,8 @@
       // preload the ball
       // first is the variable name, second is the location of the graphic
       myGame.load.image('ball', 'img/ball.png');
+      // preload the paddle
+      myGame.load.image('paddle', 'img/paddle.png');
     }
 
     // this is executed once after the preload functions finishes
@@ -39,15 +43,35 @@
 
       // make the ball stop at the edges of the world
       ball.body.collideWorldBounds = true;
-      // make the ball bounce 
+      // make the ball bounce
       ball.body.bounce.set(1);
 
       // set velocity of ball
       ball.body.velocity.set(150, 150);
+
+      // add the paddle
+      // world.width and world.height for positioning
+      paddle = myGame.add.sprite(myGame.world.width*0.5,
+        myGame.world.height-5,
+        'paddle');
+        // set initial location
+        paddle.anchor.set(0.5,1);
+
+        // set the physics of paddle, so it cannot go past walls
+        myGame.physics.enable(paddle, Phaser.Physics.ARCADE);
+
+
     }
 
     // This is executed on every frame
     function update() {
+      // check for collision between ball and paddle
+      // with just stis line, the paddle can be knocked out of
+      // the world
+      myGame.physics.arcade.collide(ball,paddle);
+
+      // to keep the paddle in the world
+      paddle.body.immovable = true;
     }
 </script>
 </body>
