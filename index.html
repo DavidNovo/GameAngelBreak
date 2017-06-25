@@ -21,6 +21,9 @@
     var newBrick;
     var brickInfo;
 
+    // for the score
+    var scoreText;
+    var score = 0;
 
 
     // preload the assets for the game
@@ -85,6 +88,10 @@
 
         // create the brick field
         initBricks();
+
+        // display the score
+        scoreText = myGame.add.text(5, 5,
+          'Points: 0', { font: '18px Arial', fill: '#0095DD' });
     }
 
     // This is executed on every frame
@@ -142,6 +149,9 @@
     // this function is called when ball hits brick
     function ballHitBrick(ball, brick) {
       brick.kill();
+      // update the score
+      score += 10;
+      scoreText.setText('Points: ' + score);
     }
 </script>
 </body>
