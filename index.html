@@ -29,12 +29,26 @@
 
     // this is executed once after the preload functions finishes
     function create() {
+      // set the physics engine to use
+      myGame.physics.startSystem(Phaser.Physics.ARCADE);
       // draw ball, x,y, and name of asset defined earlier
       ball = myGame.add.sprite(50, 50, 'ball');
+
+      // add the ball to the physics system
+      myGame.physics.enable(ball, Phaser.Physics.ARCADE);
+
+      // make the ball stop at the edges of the world
+      ball.body.collideWorldBounds = true;
+      // make the ball bounce 
+      ball.body.bounce.set(1);
+
+      // set velocity of ball
+      ball.body.velocity.set(150, 150);
     }
 
     // This is executed on every frame
-    function update() {}
+    function update() {
+    }
 </script>
 </body>
 </html>
