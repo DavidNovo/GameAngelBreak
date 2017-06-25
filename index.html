@@ -16,6 +16,13 @@
     var ball
     var paddle
 
+    // for the brick field
+    var bricks;
+    var newBrick;
+    var brickInfo;
+
+
+
     // preload the assets for the game
     function preload() {
       myGame.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -29,6 +36,9 @@
       myGame.load.image('ball', 'img/ball.png');
       // preload the paddle
       myGame.load.image('paddle', 'img/paddle.png');
+      // preload a brick image
+      myGame.load.image('brick', "img/brick.png");
+
     }
 
     // this is executed once after the preload functions finishes
@@ -73,7 +83,8 @@
         // set the physics of paddle, so it cannot go past walls
         myGame.physics.enable(paddle, Phaser.Physics.ARCADE);
 
-
+        // create the brick field
+        initBricks();
     }
 
     // This is executed on every frame
@@ -89,6 +100,40 @@
 
       // to keep the paddle in the world
       paddle.body.immovable = true;
+    }
+
+    function initBricks() {
+      brickInfo = {
+        width: 50,
+        height: 20,
+        count: {
+          row: 7,
+          col: 3
+        },
+        offset: {
+          top: 50,
+          left: 60
+        },
+        padding: 10
+      };
+      bricks = myGame.add.group();
+      // remember to initalize vars
+      for( var col = 0; col<brickInfo.count.col; col++){
+        for (var row = 0; row < brickInfo.count.row; row++) {
+          // create new brick and add it to the group
+          var brickX = (row*(brickInfo.width + brickInfo.padding))+
+            brickInfo.offset.left;
+          var brickY = (col*(brickInfo.height+brickInfo.padding)) +
+            brickInfo.offset.top;
+          newBrick = myGame.add.sprite(brickX, brickY, 'brick');
+          myGame.physics.enable(newBrick, Phaser.Physics.ARCADE);
+          newBrick.body.immovable = true;
+          newBrick.anchor.set(0.5);
+          bricks.add(newBrick);
+
+        }
+      }
+
     }
 </script>
 </body>
