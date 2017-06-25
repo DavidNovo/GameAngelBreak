@@ -12,6 +12,8 @@
     var myGame = new Phaser.Game(480, 320, Phaser.AUTO, null, {
       preload: preload, create: create, update: update
     });
+
+    var ball
     // preload the assets for the game
     function preload() {
       myGame.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -19,10 +21,17 @@
       myGame.scale.pageAlignVertically = true;
 
       myGame.stage.backgroundColor = '#555';
+
+      // preload the ball
+      // first is the variable name, second is the location of the graphic
+      myGame.load.image('ball', 'img/ball.png');
     }
 
     // this is executed once after the preload functions finishes
-    function create() {}
+    function create() {
+      // draw ball, x,y, and name of asset defined earlier
+      ball = myGame.add.sprite(50, 50, 'ball');
+    }
 
     // This is executed on every frame
     function update() {}
