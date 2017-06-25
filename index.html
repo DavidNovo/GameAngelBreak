@@ -36,7 +36,9 @@
       // set the physics engine to use
       myGame.physics.startSystem(Phaser.Physics.ARCADE);
       // draw ball, x,y, and name of asset defined earlier
-      ball = myGame.add.sprite(50, 50, 'ball');
+      ball = myGame.add.sprite(myGame.world.width*0.5,
+        myGame.world.height-25, 'ball');
+      ball.anchor.set(0.5);
 
       // add the ball to the physics system
       myGame.physics.enable(ball, Phaser.Physics.ARCADE);
@@ -47,7 +49,7 @@
       ball.body.bounce.set(1);
 
       // set velocity of ball
-      ball.body.velocity.set(150, 150);
+      ball.body.velocity.set(150, -150);
 
       // add the paddle
       // world.width and world.height for positioning
@@ -69,6 +71,10 @@
       // with just stis line, the paddle can be knocked out of
       // the world
       myGame.physics.arcade.collide(ball,paddle);
+
+      // have default input controll the paddle
+      paddle.x = myGame.input.x || myGame.world.width*0.5;
+
 
       // to keep the paddle in the world
       paddle.body.immovable = true;
