@@ -93,6 +93,9 @@
       // with just stis line, the paddle can be knocked out of
       // the world
       myGame.physics.arcade.collide(ball,paddle);
+      // check collisions between ball and bricks
+      // when they collide, call new function
+      myGame.physics.arcade.collide(ball, bricks, ballHitBrick);
 
       // have default input controll the paddle
       paddle.x = myGame.input.x || myGame.world.width*0.5;
@@ -129,11 +132,16 @@
           myGame.physics.enable(newBrick, Phaser.Physics.ARCADE);
           newBrick.body.immovable = true;
           newBrick.anchor.set(0.5);
+          // finally add new brick to group
           bricks.add(newBrick);
 
         }
       }
+    }
 
+    // this function is called when ball hits brick
+    function ballHitBrick(ball, brick) {
+      brick.kill();
     }
 </script>
 </body>
