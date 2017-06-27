@@ -25,6 +25,13 @@
     var scoreText;
     var score = 0;
 
+    // player lives
+    var lives = 3;
+    var livesText;
+    var lifeLostText
+    var textStyle = { font: '18px Arial', fill: '#0095DD' };
+
+
 
     // preload the assets for the game
     function preload() {
@@ -67,10 +74,9 @@
       ball.checkWorldBounds = true;
 
       // if ball out of world bounds end game
-      ball.events.onOutOfBounds.add(function(){
-             alert('Game over!');
-             location.reload();
-         }, this);
+      // if player lives are used up
+      // note the event, this is added to all out of bounds events
+      ball.events.onOutOfBounds.add(ballLeaveScreen, this);
 
 
 
@@ -92,6 +98,16 @@
         // display the score
         scoreText = myGame.add.text(5, 5,
           'Points: 0', { font: '18px Arial', fill: '#0095DD' });
+
+        //display player lives
+        livesText = myGame.add.text(myGame.world.width-5, 5,
+          'Lives: '+lives, textStyle);
+        livesText.anchor.set(1,0);
+        lifeLostText = myGame.add.text(myGame.world.width*0.5,
+          myGame.world.height*0.5,
+          'Life lost, click to continue', textStyle);
+        lifeLostText.anchor.set(0.5);
+        lifeLostText.visible = false;
     }
 
     // This is executed on every frame
@@ -162,6 +178,27 @@
       }
       if(count_alive == 0) {
         alert('You won the game, good job');
+        location.reload();
+      }
+    }
+
+    // what to change when ball leaves the screen
+    function ballLeaveScreen() {
+      lives--;
+      if (lives) {
+        livesText.setText('Lives: ' +lives);
+        lifeLostText.visible = true;
+        ball.reset(myGame.world.width*0.5, myGame.world.height-25);
+        paddle.reset(myGame.world.width*0.5, myGame.world.height-5);
+        // ondown is an event, this function is bound to that event
+        // the function will be called once
+        // only on first click will msg be removed
+        myGame.input.onDown.addOnce(function() {
+          lifeLostText.visible = false;
+          ball.body.velocity.set(150, -150);
+        }, this);
+      } else {
+        alert('You lost, game over');
         location.reload();
       }
     }
