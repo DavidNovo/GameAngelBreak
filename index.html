@@ -48,6 +48,8 @@
       myGame.load.image('paddle', 'img/paddle.png');
       // preload a brick image
       myGame.load.image('brick', "img/brick.png");
+      // preload the spritesheet for the ball
+      myGame.load.spritesheet('ball', 'img/wobble.png', 20, 20);
 
     }
 
@@ -58,6 +60,7 @@
       // draw ball, x,y, and name of asset defined earlier
       ball = myGame.add.sprite(myGame.world.width*0.5,
         myGame.world.height-25, 'ball');
+        ball.animations.add('wobble', [0, 1, 0, 2, 0, 1, 0, 2, 0], 24);
       ball.anchor.set(0.5);
 
       // add the ball to the physics system
@@ -77,6 +80,8 @@
       // if player lives are used up
       // note the event, this is added to all out of bounds events
       ball.events.onOutOfBounds.add(ballLeaveScreen, this);
+
+
 
 
 
@@ -103,6 +108,8 @@
         livesText = myGame.add.text(myGame.world.width-5, 5,
           'Lives: '+lives, textStyle);
         livesText.anchor.set(1,0);
+        // this text only turned visible when ball leaves the bottom
+        // of the world
         lifeLostText = myGame.add.text(myGame.world.width*0.5,
           myGame.world.height*0.5,
           'Life lost, click to continue', textStyle);
@@ -115,7 +122,7 @@
       // check for collision between ball and paddle
       // with just stis line, the paddle can be knocked out of
       // the world
-      myGame.physics.arcade.collide(ball,paddle);
+      myGame.physics.arcade.collide(ball,paddle, ballHitPaddle);
       // check collisions between ball and bricks
       // when they collide, call new function
       myGame.physics.arcade.collide(ball, bricks, ballHitBrick);
@@ -162,9 +169,19 @@
       }
     }
 
+    // this is called when ball hits the paddle
+    function ballHitPaddle(ball, paddle) {
+        ball.animations.play('wobble');
+    }
+
     // this function is called when ball hits brick
     function ballHitBrick(ball, brick) {
-      brick.kill();
+      var killTween = myGame.add.tween(brick.scale);
+      killTween.to({x : 0, y : 0}, 200, Phaser.Easing.Linear.None);
+      killTween.onComplete.addOnce(function (){
+        brick.kill();
+      }, this);
+      killTween.start();
       // update the score
       score += 10;
       scoreText.setText('Points: ' + score);
