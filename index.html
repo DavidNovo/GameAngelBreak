@@ -181,8 +181,10 @@
     }
 
     // this is called when ball hits the paddle
+    // note random element to change angle ball bounces
     function ballHitPaddle(ball, paddle) {
         ball.animations.play('wobble');
+        ball.body.velocity.x = -1 * 5 * (paddle.x - ball.x);
     }
 
     // this function is called when ball hits brick
@@ -204,10 +206,10 @@
           count_alive++;
         }
       }
-      if(count_alive == 0) {
-        alert('You won the game, good job');
-        location.reload();
-      }
+      if(score === brickInfo.count.row*brickInfo.count.col*10) {
+           alert('You won the game, congratulations!');
+           location.reload();
+       }
     }
 
     // what to change when ball leaves the screen
