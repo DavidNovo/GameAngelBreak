@@ -31,6 +31,11 @@
     var lifeLostText
     var textStyle = { font: '18px Arial', fill: '#0095DD' };
 
+    // start button
+    var playing = false;
+    var startButton;
+
+
 
 
     // preload the assets for the game
@@ -51,6 +56,10 @@
       // preload the spritesheet for the ball
       myGame.load.spritesheet('ball', 'img/wobble.png', 20, 20);
 
+      // load the spritesheet for start button
+      myGame.load.spritesheet('button', 'img/button.png', 120, 40);
+
+
     }
 
     // this is executed once after the preload functions finishes
@@ -67,8 +76,8 @@
       myGame.physics.enable(ball, Phaser.Physics.ARCADE);
       // let ball pass through bottom of world
       myGame.physics.arcade.checkCollision.down = false;
-      // make the ball stop at the edges of the world
-      ball.body.velocity.set(150, -150);
+      // start ball moving
+      //ball.body.velocity.set(150, -150);
       // set the ball to collide at world boundaries
       ball.body.collideWorldBounds = true;
       // set the ball to bounce
@@ -80,11 +89,6 @@
       // if player lives are used up
       // note the event, this is added to all out of bounds events
       ball.events.onOutOfBounds.add(ballLeaveScreen, this);
-
-
-
-
-
 
       // add the paddle
       // world.width and world.height for positioning
@@ -115,6 +119,13 @@
           'Life lost, click to continue', textStyle);
         lifeLostText.anchor.set(0.5);
         lifeLostText.visible = false;
+
+      // create game start button
+      // see refernce to over. down. and out events
+      startButton = myGame.add.button(myGame.world.width * 0.5,
+        myGame.world.height * 0.5, 'button', startGame, this, 1, 0, 2);
+      startButton.anchor.set(0.5);
+
     }
 
     // This is executed on every frame
@@ -127,10 +138,10 @@
       // when they collide, call new function
       myGame.physics.arcade.collide(ball, bricks, ballHitBrick);
 
-      // have default input controll the paddle
-      paddle.x = myGame.input.x || myGame.world.width*0.5;
-
-
+      if (playing) {
+        // have default input controll the paddle
+        paddle.x = myGame.input.x || myGame.world.width*0.5;
+      }
       // to keep the paddle in the world
       paddle.body.immovable = true;
     }
@@ -219,6 +230,13 @@
         location.reload();
       }
     }
+
+    function startGame() {
+        startButton.destroy();
+        ball.body.velocity.set(150, -150);
+        playing = true;
+    }
+
 
 </script>
 </body>
